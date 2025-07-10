@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selamat Datang di E-Surat</title>
 
-    <!-- Font Google untuk tampilan yang lebih bersih -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -19,8 +18,6 @@
     <link rel="icon" id="favicon" href="{{ asset('images/favicon.svg') }}" type="image/svg+xml">
 
     <style>
-
-
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -110,8 +107,8 @@
 
 <body>
 
-    <!-- Tidak ada lagi kelas 'login-page' atau 'login-box' -->
     <div class="hero-section">
+
         <div class="container text-center px-4">
 
             <!-- Logo -->
@@ -120,7 +117,7 @@
             <!-- Judul Utama -->
             <h1 class="hero-title mb-3">Selamat Datang di E-Surat</h1>
 
-            <!-- Subtitle/Deskripsi -->
+            <!-- Deskripsi -->
             <p class="hero-subtitle mb-5">
                 Platform digital untuk mengelola surat-menyurat dengan efisien, aman, dan modern.
             </p>
