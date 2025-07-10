@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" 
+     width="32" 
+     height="32" 
+     viewBox="0 0 24 24">
+    
+    <!-- Sematkan CSS di dalam SVG -->
+    <style>
+        /* 
+         * 'path' adalah selector untuk semua bentuk di SVG ini.
+         * Defaultnya (untuk mode terang), ikon akan berwarna hitam.
+        */
+        path {
+            stroke: #1f2937; /* Warna hitam keabu-abuan untuk mode terang */
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 
+         * Media query ini akan aktif jika browser/OS dalam mode gelap.
+         * Jika aktif, ikon akan berubah menjadi putih.
+        */
+        @media (prefers-color-scheme: dark) {
+            path {
+                stroke: #f8fafc; /* Warna putih keabu-abuan untuk mode gelap */
+            }
+        }
+    </style>
+
+    <!-- 
+      * Ganti elemen SVG Anda menjadi <path> dan hapus atribut styling inline.
+      * CSS di atas akan otomatis diterapkan pada elemen ini.
+    -->
+    <path d="M3 5H21C22.1046 5 23 5.89543 23 7V19C23 20.1046 22.1046 21 21 21H3C1.89543 21 1 20.1046 1 19V7C1 5.89543 1.89543 5 3 5Z"></path>
+    <path d="M3 7L12 14L21 7"></path>
+
+</svg>
