@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Kelola Surat Masuk')
-
+{{-- menambahkan style khusus dengan @push --}}
 @push('styles')
 
     <style>

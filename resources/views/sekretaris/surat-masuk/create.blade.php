@@ -21,7 +21,6 @@
             <label>Perihal</label>
             <textarea name="perihal" class="form-control" rows="3" required></textarea>
         </div>
-        {{-- INI KODE YANG BENAR --}}
         <div class="form-group">
             <label>File Dokumen (PDF, DOC, DOCX)</label>
             {{-- Bungkus input dan label di dalam div.custom-file --}}

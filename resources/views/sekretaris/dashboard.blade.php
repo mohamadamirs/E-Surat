@@ -140,7 +140,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     // Script untuk memuat modal AJAX
     $(document).ready(function() {
@@ -157,4 +157,4 @@
         });
     });
 </script>
-@endsection
+@endpush

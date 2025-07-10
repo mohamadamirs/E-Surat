@@ -24,15 +24,13 @@
             <label>Perihal</label>
             <textarea name="perihal" class="form-control" rows="3" required>{{ $suratMasuk->perihal }}</textarea>
         </div>
-        {{-- VERSI BARU --}}
         <div class="form-group">
+            {{-- label dokumen --}}
             <label>File Dokumen (PDF, DOC, DOCX)</label>
 
-            {{-- 1. Tambahkan teks petunjuk untuk pengguna --}}
             <p class="text-muted small">Kosongkan jika tidak ingin mengubah file dokumen.</p>
-
+            {{-- custom file, js (partials/main) --}}
             <div class="custom-file">
-                {{-- 2. Hapus atribut 'required' dari input file --}}
                 <input type="file" class="custom-file-input" id="file_dokumen_edit" name="file_dokumen">
                 <label class="custom-file-label" for="file_dokumen_edit">Pilih file baru...</label>
             </div>

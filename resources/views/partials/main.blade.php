@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    // 1. Inisialisasi DataTables
+    // Inisialisasi DataTables
     $('#main-table').DataTable({
         "responsive": true,
         "lengthChange": true,
@@ -9,7 +9,7 @@ $(document).ready(function() {
         "order": [], // Opsional: nonaktifkan pengurutan awal
     });
 
-    // 2. Event handler untuk memicu Modal AJAX
+    // Event handler untuk memicu Modal AJAX
     $('body').on('click', '.btn-modal', function() {
         const url = $(this).data('url');
         // Gunakan .load() untuk mengambil konten dan memasukkannya ke modal
@@ -19,7 +19,7 @@ $(document).ready(function() {
         });
     });
 
-    // 3. Event handler untuk menampilkan nama file saat upload
+    // Event handler untuk menampilkan nama file saat upload
     $('body').on('change', '.custom-file-input', function() {
         let fileName = $(this).val().split('\\').pop();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);

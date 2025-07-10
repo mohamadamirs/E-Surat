@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="row">
-    {{-- Kolom Kiri: Detail Surat & Riwayat Disposisi --}}
+    {{-- Kolom Kiri detail Surat & Riwayat Disposisi --}}
     <div class="col-md-8">
         <!-- Card Detail Surat -->
         <div class="card card-primary card-outline">
@@ -12,15 +12,9 @@
                 <h3 class="card-title">Informasi Surat</h3>
                 {{-- Menambahkan tombol kembali untuk UX yang lebih baik --}}
                 <div class="card-tools">
-                    @if(auth()->user()->role == 'sekretaris')
                     <a href="{{ route('sekretaris.surat-masuk.index') }}" class="btn btn-tool" title="Kembali ke Daftar">
                         <i class="fas fa-arrow-left"></i> Kembali
                     </a>
-                    @elseif(auth()->user()->role == 'admin')
-                    <a href="{{ route('admin.lihat_surat.masuk') }}" class="btn btn-tool" title="Kembali ke Daftar">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </a>
-                    @endif
                 </div>
             </div>
             <div class="card-body">

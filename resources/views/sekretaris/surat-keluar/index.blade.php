@@ -65,7 +65,7 @@
     <div class="modal fade" id="main-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
-                {{-- Konten form akan dimuat di sini oleh AJAX --}}
+                {{-- Konten form akan dimuat di sini pakai AJAX --}}
             </div>
         </div>
     </div>
