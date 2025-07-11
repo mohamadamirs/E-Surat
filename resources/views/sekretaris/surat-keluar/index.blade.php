@@ -24,9 +24,7 @@
                     <th>Tujuan</th>
                     <th>Perihal</th>
                     <th>Dokumen</th>
-                    @if(auth()->user->role == 'sekretaris')
                     <th>Aksi</th>
-                    @endif
                 </tr>
             </thead>
             <tbody>

@@ -11,6 +11,7 @@
         .iti {
             width: 100%;
         }
+
         .iti .form-control {
             width: 100%;
         }
@@ -92,6 +93,7 @@
                 </tbody>
             </table>
         </div>
+
     </div>
 
     {{-- Struktur Modal Universal (gunakan modal-lg) --}}
@@ -108,58 +110,67 @@
     {{-- Memuat library intl-tel-input --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
     <script>
-    // Fungsi untuk inisialisasi intl-tel-input
-    function initializeIntlTelInput(selector) {
-        const input = document.querySelector(selector);
-        if (input) {
-            window.iti = window.intlTelInput(input, {
-                separateDialCode: true,
-                preferredCountries: ["id"],
-                initialCountry: "id",
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
-            });
+        // Fungsi untuk inisialisasi intl-tel-input
+        function initializeIntlTelInput(selector) {
+            const input = document.querySelector(selector);
+            if (input) {
+                window.iti = window.intlTelInput(input, {
+                    separateDialCode: true,
+                    preferredCountries: ["id"],
+                    initialCountry: "id",
+                    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
+                });
+            }
         }
-    }
 
-    $(document).ready(function() {
-        // Inisialisasi DataTables
-        $("#main-table").DataTable({
-            "responsive": true, "lengthChange": true, "autoWidth": false, "order": [],
+            $(document).ready(function() {
+                // Inisialisasi DataTables dengan pagination bawaan DataTables
+                $("#main-table").DataTable({
+                    "paging": true,
+                    "responsive": true,
+                    "lengthChange": true,
+                    "autoWidth": false,
+                    "order": [],
+                });
+            // Event handler untuk memicu Modal
+            $('body').on('click', '.btn-modal', function(e) {
+                e.preventDefault();
+                const url = $(this).data('url');
+                $('#main-modal .modal-content').load(url, function(response, status, xhr) {
+                    if (status == "success") {
+                        $('#main-modal').modal('show');
+                        initializeIntlTelInput("#mobile_code");
+                    } else {
+                        alert("Gagal memuat konten. Silakan coba lagi.");
+                    }
+                });
+            });
+            // Event listener untuk submit form DI DALAM modal
+            $('body').on('submit', '#main-modal form', function() {
+                if (window.iti) {
+                    const fullNumber = window.iti.getNumber(); // Hasil: "+62..."
+                    const numberWithoutPlus = fullNumber.replace('+', ''); // Hasil: "62..."
+                    $("#nomer_hp").val(numberWithoutPlus); // Simpan nomor bersih
+                }
+                return true;
+            });
         });
-        // Event handler untuk memicu Modal
-        $('body').on('click', '.btn-modal', function(e) {
-            e.preventDefault();
-            const url = $(this).data('url');
-            $('#main-modal .modal-content').load(url, function(response, status, xhr) {
-                if (status == "success") {
-                    $('#main-modal').modal('show');
-                    initializeIntlTelInput("#mobile_code");
-                } else {
-                    alert("Gagal memuat konten. Silakan coba lagi.");
+        // Fungsi untuk Konfirmasi Hapus
+        function deleteConfirmation(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
                 }
             });
-        });
-        // Event listener untuk submit form DI DALAM modal
-        $('body').on('submit', '#main-modal form', function() {
-            if (window.iti) {
-                const fullNumber = window.iti.getNumber(); // Hasil: "+62..."
-                const numberWithoutPlus = fullNumber.replace('+', ''); // Hasil: "62..."
-                $("#nomer_hp").val(numberWithoutPlus); // Simpan nomor bersih
-            }
-            return true; 
-        });
-    });
-    // Fungsi untuk Konfirmasi Hapus
-    function deleteConfirmation(id) {
-        Swal.fire({
-            title: 'Apakah Anda yakin?', text: "Data yang dihapus tidak dapat dikembalikan!", icon: 'warning',
-            showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, hapus!', cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form-' + id).submit();
-            }
-        });
-    }
+        }
     </script>
 @endpush

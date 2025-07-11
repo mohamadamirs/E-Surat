@@ -41,7 +41,7 @@
                 <div class="icon">
                     <i class="fas fa-clock"></i>
                 </div>
-                <a href="#" class="small-box-footer">.</a>
+                <a href="#" class="small-box-footer">-</a>
             </div>
         </div>
         <div class="col-lg-3 col-6">
@@ -53,7 +53,7 @@
                 <div class="icon">
                     <i class="fas fa-check-double"></i>
                 </div>
-                <a href="#" class="small-box-footer">.</a>
+                <a href="#" class="small-box-footer">-</a>
             </div>
         </div>
     </div>

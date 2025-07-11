@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
 
-    <!-- CSS AdminLTE (sudah termasuk Bootstrap) -->
+    <!-- CSS AdminLTE  -->
     <link href="{{ asset('adminlte/dist/css/adminlte.min.css') }}" rel="stylesheet">
     <!-- Font Awesome untuk Ikon -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
@@ -145,7 +145,7 @@
         </div>
     </div>
 
-    <!-- Script tidak perlu diubah -->
+    <!-- Script -->
     <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 

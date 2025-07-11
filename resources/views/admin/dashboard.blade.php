@@ -91,9 +91,6 @@
     </div>
 
     <div class="row">
-        {{-- ====================================================================== --}}
-        {{--          BAGIAN 3: TABEL PENGGUNA YANG BARU DITAMBAHKAN                --}}
-        {{-- ====================================================================== --}}
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
@@ -135,6 +132,7 @@
                         </tbody>
                     </table>
                 </div>
+                
             </div>
         </div>
     </div>
