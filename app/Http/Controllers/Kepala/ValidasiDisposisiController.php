@@ -6,125 +6,126 @@ use App\Http\Controllers\Controller;
 use App\Models\Disposisi;
 use App\Models\SuratMasuk;
 use Illuminate\Http\Request;
+use App\Services\Whatsapp; //notifikasi
+use Illuminate\Support\Facades\Log; //import log untuk menampilkan error
 
 class ValidasiDisposisiController extends Controller
 {
     public function index()
     {
-        // Ambil disposisi yang:
-        // 1. Ditujukan untuk kepala yang sedang login (auth()->id())
-        // 2. Statusnya masih 'Menunggu'
-        $disposisiList = Disposisi::with('suratMasuk', 'sekretaris') // Eager load untuk efisiensi
+        $disposisiList = Disposisi::with('suratMasuk', 'sekretaris')
             ->where('id_kepala', auth()->id())
             ->where('status_validasi', 'Menunggu')
             ->latest()
             ->get();
-
         return view('kepala.validasi.index', compact('disposisiList'));
     }
 
-    /**
-     * Menyetujui sebuah disposisi.
-     */
     public function approve(Disposisi $disposisi)
     {
-        // Keamanan: Pastikan hanya kepala yang dituju yang bisa menyetujui
         if ($disposisi->id_kepala !== auth()->id()) {
             abort(403, 'Akses Ditolak.');
         }
+        $disposisi->update(['status_validasi' => 'Disetujui', 'tanggal_validasi' => now()]);
 
-        $disposisi->update([
-            'status_validasi' => 'Disetujui',
-            'tanggal_validasi' => now(),
-        ]);
+        $this->notifikasiWhatsapp($disposisi, 'Disetujui');
 
         return redirect()->route('kepala.validasi.index')->with('success', 'Disposisi untuk surat ' . $disposisi->suratMasuk->nomor_surat . ' telah disetujui.');
     }
 
-    /**
-     * Menolak sebuah disposisi.
-     */
     public function reject(Disposisi $disposisi)
     {
-        // Keamanan: Pastikan hanya kepala yang dituju yang bisa menolak
         if ($disposisi->id_kepala !== auth()->id()) {
             abort(403, 'Akses Ditolak.');
         }
+        $disposisi->update(['status_validasi' => 'Ditolak', 'tanggal_validasi' => now()]);
 
-        $disposisi->update([
-            'status_validasi' => 'Ditolak',
-            'tanggal_validasi' => now(),
-        ]);
+        $this->notifikasiWhatsapp($disposisi, 'Ditolak');
 
         return redirect()->route('kepala.validasi.index')->with('success', 'Disposisi untuk surat ' . $disposisi->suratMasuk->nomor_surat . ' telah ditolak.');
     }
+
     public function show(SuratMasuk $suratMasuk)
     {
-        // Keamanan: Pastikan kepala ini memang menerima disposisi untuk surat ini
-        // Ini mencegah kepala melihat detail surat yang tidak relevan baginya.
         $isRelevant = $suratMasuk->disposisi()->where('id_kepala', auth()->id())->exists();
-
         if (!$isRelevant) {
             abort(403, 'Anda tidak memiliki disposisi untuk surat ini.');
         }
-
-        // Muat semua relasi yang dibutuhkan untuk ditampilkan di view
         $suratMasuk->load('pengelola', 'disposisi.sekretaris', 'disposisi.kepala');
-
-        // Menggunakan view khusus untuk kepala
         return view('kepala.validasi.show', compact('suratMasuk'));
     }
+
     public function revise(Request $request, Disposisi $disposisi)
     {
-        // Keamanan
         if ($disposisi->id_kepala !== auth()->id()) {
             abort(403, 'Akses Ditolak.');
         }
-
-        // Validasi input catatan revisi
-        $validated = $request->validate([
-            'catatan_revisi' => 'required|string|min:10',
-        ]);
-
+        $validated = $request->validate(['catatan_revisi' => 'required|string|min:10']);
         $disposisi->update([
             'status_validasi' => 'Revisi',
             'catatan_revisi' => $validated['catatan_revisi'],
-            'tanggal_validasi' => now(), // Kita anggap revisi juga sebuah bentuk validasi
+            'tanggal_validasi' => now(),
         ]);
+
+        $this->notifikasiWhatsapp($disposisi, 'Revisi');
 
         return redirect()->route('kepala.validasi.show', $disposisi->id_surat_masuk)
             ->with('success', 'Instruksi revisi berhasil dikirim ke sekretaris.');
     }
+
     public function history()
     {
-        // Ambil disposisi yang:
-        //  Ditujukan untuk kepala yang sedang login
-        //  Statusnya BUKAN lagi 'Menunggu'
-        $historyList = Disposisi::with('suratMasuk', 'sekretaris') // Eager load
+        $historyList = Disposisi::with('suratMasuk', 'sekretaris')
             ->where('id_kepala', auth()->id())
-            ->whereIn('status_validasi', ['Disetujui', 'Ditolak', 'Revisi']) // Kondisi status
-            ->orderBy('tanggal_validasi', 'desc') // Urutkan dari yang terbaru divalidasi
-            ->get();
-
+            ->whereIn('status_validasi', ['Disetujui', 'Ditolak', 'Revisi'])
+            ->orderBy('tanggal_validasi', 'desc')->get();
         return view('kepala.riwayat.index', compact('historyList'));
     }
+
     public function bulkDelete(Request $request)
     {
-        $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'exists:disposisi,id', // Pastikan setiap ID ada di tabel disposisi
-        ]);
+        $request->validate(['ids' => 'required|array', 'ids.*' => 'exists:disposisi,id']);
+        Disposisi::where('id_kepala', auth()->id())->whereIn('id', $request->ids)->delete();
+        return redirect()->route('kepala.riwayat.index')->with('success', 'Data riwayat yang dipilih berhasil dihapus.');
+    }
 
-        // Keamanan & Hapus Data:
-        // Hapus hanya disposisi yang ID-nya ada di dalam array request
-        // DAN milik kepala yang sedang login.
-        // Ini mencegah user menghapus data milik orang lain.
-        Disposisi::where('id_kepala', auth()->id())
-                 ->whereIn('id', $request->ids)
-                 ->delete();
 
-        // 3. Redirect kembali dengan pesan sukses.
-        return redirect()->route('kepala.riwayat.index')
-                         ->with('success', 'Data riwayat yang dipilih berhasil dihapus.');
+    /**
+     * Helper method untuk mengirim notifikasi WhatsApp ke Sekretaris.
+     */
+    private function notifikasiWhatsapp(Disposisi $disposisi, string $status): void
+    {
+        // PERBAIKAN #2: Pindahkan 'try' ke dalam fungsi untuk membungkus logika
+        try {
+            $sekretaris = $disposisi->sekretaris;
+            if ($sekretaris && $sekretaris->nomer_hp) {
+                $whatsapp = new Whatsapp();
+
+                $pesanAksi = "telah *{$status}* oleh *{$disposisi->kepala->name}*";
+
+                $whatsapp->to($sekretaris->nomer_hp)
+                    ->line("Yth. *" . $sekretaris->name . "*")
+                    ->line()
+                    ->line("Disposisi yang Anda berikan " . $pesanAksi)
+                    ->separator()
+                    ->bold("No. Surat: ")->line($disposisi->suratMasuk->nomor_surat)
+                    ->bold("Perihal: ")->line($disposisi->suratMasuk->perihal);
+
+                if ($status === 'Revisi' && $disposisi->catatan_revisi) {
+                    $whatsapp->line()
+                        ->bold("Catatan Revisi:")
+                        ->italic($disposisi->catatan_revisi);
+                }
+
+                $whatsapp->separator()
+                    ->line("Silakan periksa detailnya di sistem E-Surat. Terima kasih.")
+                    ->line()
+                    ->italic('Notifikasi Otomatis E-Surat');
+
+                $whatsapp->send();
+            }
+        } catch (\Exception $e) {
+            Log::error('Gagal mengirim notifikasi validasi WA: ' . $e->getMessage());
+        }
     }
 }
