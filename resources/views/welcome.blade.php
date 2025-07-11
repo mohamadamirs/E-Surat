@@ -115,7 +115,7 @@
             <img src="https://img.icons8.com/fluency/96/000000/mail.png" alt="E-Surat Logo" class="mb-4 logo-img">
 
             <!-- Judul Utama -->
-            <h1 class="hero-title mb-3">Selamat Datang di E-Surat</h1>
+            <h1 class="hero-title mb-3">Selamat Datang di E-Surat Smk karya Bhakti Brebes</h1>
 
             <!-- Deskripsi -->
             <p class="hero-subtitle mb-5">
