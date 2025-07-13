@@ -108,8 +108,10 @@ class ValidasiDisposisiController extends Controller
                     ->line()
                     ->line("Disposisi yang Anda berikan " . $pesanAksi)
                     ->separator()
-                    ->bold("No. Surat: ")->line($disposisi->suratMasuk->nomor_surat)
-                    ->bold("Perihal: ")->line($disposisi->suratMasuk->perihal);
+                    ->line()
+                    ->line("*No. Surat : " . $disposisi->suratMasuk->nomor_surat . "*")
+                    ->line()
+                    ->line("*Perihal : " . $disposisi->suratMasuk->perihal . "*");
 
                 if ($status === 'Revisi' && $disposisi->catatan_revisi) {
                     $whatsapp->line()

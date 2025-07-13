@@ -40,9 +40,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Halaman kelola user (CRUD)
     Route::resource('users', AdminUserController::class);
     // lihat surat masuk
-    Route::get('/lihat/surat-masuk', [LihatSuratController::class, 'suratMasuk'])->name('lihat_surat.masuk');
-    // lihat surat keluar
-    Route::get('/lihat/surat-keluar', [LihatSuratController::class, 'suratKeluar'])->name('lihat_surat.keluar');
 });
 
 // Semua route untuk kepala

@@ -41,7 +41,14 @@
             /* Lebih tebal */
             color: #004999;
             /* Warna biru tua yang elegan */
-            letter-spacing: -2px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #004999;
+
+            margin-bottom: 2rem; 
         }
 
         .hero-subtitle {
@@ -115,7 +122,8 @@
             <img src="https://img.icons8.com/fluency/96/000000/mail.png" alt="E-Surat Logo" class="mb-4 logo-img">
 
             <!-- Judul Utama -->
-            <h1 class="hero-title mb-3">Selamat Datang di E-Surat Smk karya Bhakti Brebes</h1>
+            <h1 class="hero-title mb-3">Selamat Datang di E-Surat</h1>
+            <h2>Smk karya Bhakti Brebes</h2>
 
             <!-- Deskripsi -->
             <p class="hero-subtitle mb-5">
